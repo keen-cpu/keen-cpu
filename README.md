@@ -7,4 +7,4 @@
 > trust,*\
 > *And now, his doubts have turned to dust.*
 
-![absolute cinema](./Keene2.png "cinema")
+![absolute cinema](./Keeno2.png "cinema")
