@@ -37,3 +37,10 @@ options = [
   "--trailing-comma-inline-array",
 ]
 includes = ["*.toml"]
+
+[formatter.yaml]
+command = "yamlfmt"
+includes = [
+  "*.yaml",
+  "*.yml",
+]
