@@ -3,6 +3,15 @@ excludes = [
   "LICENSE",
 ]
 
+[formatter.md]
+command = "mdformat"
+options = [
+  "--number",
+  "--wrap",
+  "72",
+]
+includes = ["*.md"]
+
 [formatter.nix]
 command = "nix"
 options = ["fmt"]
