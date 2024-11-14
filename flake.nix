@@ -21,6 +21,7 @@
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             mdformat
+            pre-commit
             shfmt
             toml-sort
             treefmt2
