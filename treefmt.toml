@@ -1,3 +1,8 @@
+excludes = [
+  "*.lock",
+  "LICENSE",
+]
+
 [formatter.nix]
 command = "nix"
 options = ["fmt"]
