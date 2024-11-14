@@ -18,10 +18,11 @@
 
       in
       {
-        devShells.default =
-          pkgs.mkShell
-            {
-            };
+        devShells.default = pkgs.mkShell {
+          packages = with pkgs; [
+            treefmt2
+          ];
+        };
 
         formatter = pkgs.nixfmt-rfc-style;
       }
