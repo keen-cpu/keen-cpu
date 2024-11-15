@@ -32,6 +32,7 @@
               shfmt
               toml-sort
               treefmt2
+              verilator
               yamlfmt
             ];
 
