@@ -29,6 +29,7 @@
               glibcLocales
               mdformat
               pre-commit
+              scons
               shfmt
               toml-sort
               treefmt2
