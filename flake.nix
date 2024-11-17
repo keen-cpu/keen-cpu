@@ -30,6 +30,7 @@
               glibcLocales
               mdformat
               pre-commit
+              ruff
               scons
               shfmt
               toml-sort
