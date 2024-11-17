@@ -18,6 +18,16 @@ command = "nix"
 options = ["fmt"]
 includes = ["*.nix"]
 
+[formatter.py]
+command = "black"
+options = [
+  "--line-length",
+  "79",
+]
+includes = [
+  "*.py",
+]
+
 [formatter.sh]
 command = "shfmt"
 options = [
