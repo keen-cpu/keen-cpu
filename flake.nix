@@ -26,6 +26,7 @@
           in
           {
             packages = with pkgs; [
+              black
               glibcLocales
               mdformat
               pre-commit
