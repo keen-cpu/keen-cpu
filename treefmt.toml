@@ -28,6 +28,15 @@ includes = [
   "*.py",
 ]
 
+[formatter.py-lint]
+command = "ruff"
+options = [
+  "check",
+]
+includes = [
+  "*.py",
+]
+
 [formatter.sh]
 command = "shfmt"
 options = [
