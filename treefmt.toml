@@ -85,6 +85,16 @@ includes = [
   "*.vh",
 ]
 
+[formatter.v-lint]
+command = "verible-verilog-lint"
+options = [
+  "--rules=parameter-name-style=localparam_style:ALL_CAPS",
+]
+includes = [
+  "*.v",
+  "*.vh",
+]
+
 [formatter.yaml]
 command = "yamlfmt"
 includes = [
