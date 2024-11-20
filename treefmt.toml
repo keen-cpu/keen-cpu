@@ -9,21 +9,25 @@ excludes = [
 command = "mdformat"
 options = [
   "--number",
-  "--wrap",
-  "72",
+  "--wrap=72",
 ]
-includes = ["*.md"]
+includes = [
+  "*.md",
+]
 
 [formatter.nix]
 command = "nix"
-options = ["fmt"]
-includes = ["*.nix"]
+options = [
+  "fmt",
+]
+includes = [
+  "*.nix",
+]
 
 [formatter.py]
 command = "black"
 options = [
-  "--line-length",
-  "79",
+  "--line-length=79",
 ]
 includes = [
   "*.py",
@@ -57,7 +61,9 @@ options = [
   "--in-place",
   "--trailing-comma-inline-array",
 ]
-includes = ["*.toml"]
+includes = [
+  "*.toml",
+]
 
 [formatter.v]
 command = "verible-verilog-format"
