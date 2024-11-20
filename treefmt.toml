@@ -1,5 +1,6 @@
 excludes = [
   "*.lock",
+  ".editorconfig",
   ".gitignore",
   "LICENSE",
 ]
