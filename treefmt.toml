@@ -1,4 +1,13 @@
-[formatter.md]
+[formatter.black]
+command = "black"
+options = [
+  "--line-length=79",
+]
+includes = [
+  "*.py",
+]
+
+[formatter.mdformat]
 command = "mdformat"
 options = [
   "--number",
@@ -17,16 +26,7 @@ includes = [
   "*.nix",
 ]
 
-[formatter.py]
-command = "black"
-options = [
-  "--line-length=79",
-]
-includes = [
-  "*.py",
-]
-
-[formatter.py-lint]
+[formatter.ruff]
 command = "ruff"
 options = [
   "check",
@@ -35,7 +35,7 @@ includes = [
   "*.py",
 ]
 
-[formatter.sh]
+[formatter.shfmt]
 command = "shfmt"
 options = [
   "--write",
@@ -48,7 +48,7 @@ includes = [
   ".envrc",
 ]
 
-[formatter.toml]
+[formatter.toml-sort]
 command = "toml-sort"
 options = [
   "--in-place",
@@ -58,7 +58,7 @@ includes = [
   "*.toml",
 ]
 
-[formatter.v]
+[formatter.verible-verilog-format]
 command = "verible-verilog-format"
 options = [
   "--column_limit=79",
@@ -85,7 +85,7 @@ includes = [
   "*.vh",
 ]
 
-[formatter.v-lint]
+[formatter.verible-verilog-lint]
 command = "verible-verilog-lint"
 options = [
   "--rules=parameter-name-style=localparam_style:ALL_CAPS",
@@ -95,7 +95,7 @@ includes = [
   "*.vh",
 ]
 
-[formatter.yaml]
+[formatter.yamlfmt]
 command = "yamlfmt"
 includes = [
   "*.yaml",
