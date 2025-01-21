@@ -3,7 +3,10 @@
 # SConstruct.py
 # Copyright (C) 2024  Jacob Koziej <jacobkoziej@gmail.com>
 
-# ruff: noqa: F821
+from SCons.Script import (
+    EnsurePythonVersion,
+    EnsureSConsVersion,
+)
 
 EnsureSConsVersion(4, 7, 0)
 EnsurePythonVersion(3, 12)
