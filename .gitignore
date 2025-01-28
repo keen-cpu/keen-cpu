@@ -1,3 +1,4 @@
 /.direnv
 /.ruff_cache
 /.sconsign.dblite
+__pycache__
