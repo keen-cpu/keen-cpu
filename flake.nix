@@ -38,6 +38,7 @@
               verible
               verilator
               yamlfmt
+              yamllint
             ];
 
             shellHook = ''

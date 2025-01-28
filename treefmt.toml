@@ -71,6 +71,13 @@ includes = [
   "*.yml",
 ]
 
+[formatter.yamllint]
+command = "yamllint"
+includes = [
+  "*.yaml",
+  "*.yml",
+]
+
 [global]
 excludes = [
   "*.lock",
