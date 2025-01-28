@@ -1,0 +1,9 @@
+[tool.black]
+line-length = 79
+
+[tool.ruff]
+line-length = 79
+
+[tool.tomlsort]
+in_place = true
+trailing_comma_inline_array = true

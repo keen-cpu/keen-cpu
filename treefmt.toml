@@ -1,18 +1,11 @@
 [formatter.black]
 command = "black"
-options = [
-  "--line-length=79",
-]
 includes = [
   "*.py",
 ]
 
 [formatter.mdformat]
 command = "mdformat"
-options = [
-  "--number",
-  "--wrap=72",
-]
 includes = [
   "*.md",
 ]
@@ -39,9 +32,6 @@ includes = [
 command = "shfmt"
 options = [
   "--write",
-  "--binary-next-line",
-  "--space-redirects",
-  "--func-next-line",
 ]
 includes = [
   "*.sh",
@@ -50,10 +40,6 @@ includes = [
 
 [formatter.toml-sort]
 command = "toml-sort"
-options = [
-  "--in-place",
-  "--trailing-comma-inline-array",
-]
 includes = [
   "*.toml",
 ]
@@ -61,24 +47,7 @@ includes = [
 [formatter.verible-verilog-format]
 command = "verible-verilog-format"
 options = [
-  "--column_limit=79",
-  "--assignment_statement_alignment=align",
-  "--case_items_alignment=align",
-  "--class_member_variable_alignment=align",
-  "--distribution_items_alignment=align",
-  "--enum_assignment_statement_alignment=align",
-  "--formal_parameters_alignment=align",
-  "--formal_parameters_indentation=indent",
-  "--module_net_variable_alignment=align",
-  "--named_parameter_alignment=align",
-  "--named_parameter_indentation=indent",
-  "--named_port_alignment=align",
-  "--named_port_indentation=indent",
-  "--port_declarations_alignment=align",
-  "--port_declarations_indentation=indent",
-  "--struct_union_members_alignment=align",
-  "--try_wrap_long_lines=true",
-  "--inplace=true",
+  "--flagfile=.verible-verilog-format",
 ]
 includes = [
   "*.v",
@@ -88,7 +57,7 @@ includes = [
 [formatter.verible-verilog-lint]
 command = "verible-verilog-lint"
 options = [
-  "--rules=parameter-name-style=localparam_style:ALL_CAPS",
+  "--flagfile=.verible-verilog-lint",
 ]
 includes = [
   "*.v",
@@ -107,5 +76,7 @@ excludes = [
   "*.lock",
   ".editorconfig",
   ".gitignore",
+  ".verible-verilog-format",
+  ".verible-verilog-lint",
   "LICENSE",
 ]
