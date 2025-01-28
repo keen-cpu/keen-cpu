@@ -8,6 +8,7 @@
 
   outputs =
     inputs:
+
     inputs.flake-utils.lib.eachDefaultSystem (
       system:
 
@@ -16,13 +17,14 @@
           inherit system;
         };
 
-        lib = pkgs.lib;
+        inherit (pkgs) lib;
 
       in
       {
         devShells.default = pkgs.mkShell (
           let
             pre-commit-bin = "${lib.getBin pkgs.pre-commit}/bin/pre-commit";
+
           in
           {
             packages = with pkgs; [
