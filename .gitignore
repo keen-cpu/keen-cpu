@@ -1,4 +1,5 @@
 /.direnv
 /.ruff_cache
 /.sconsign.dblite
+/overrides.py
 __pycache__
