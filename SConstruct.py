@@ -57,6 +57,9 @@ env.AppendUnique(
             "-Wpedantic",
         ]
     ),
+    VERILATORPATH=[
+        env.Dir("include"),
+    ],
 )
 
 if not env["verbose"]:
