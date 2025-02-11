@@ -47,7 +47,8 @@ includes = [
 [formatter.verible-verilog-format]
 command = "verible-verilog-format"
 options = [
-  "--flagfile=.verible-verilog-format",
+  "--flagfile=.flags.verible-format",
+  "--inplace=true",
 ]
 includes = [
   "*.v",
@@ -57,7 +58,7 @@ includes = [
 [formatter.verible-verilog-lint]
 command = "verible-verilog-lint"
 options = [
-  "--flagfile=.verible-verilog-lint",
+  "--rules_config_search=true",
 ]
 includes = [
   "*.v",
@@ -82,8 +83,8 @@ includes = [
 excludes = [
   "*.lock",
   ".editorconfig",
+  ".flags.verible-format",
   ".gitignore",
-  ".verible-verilog-format",
-  ".verible-verilog-lint",
+  ".rules.verible_lint",
   "LICENSE",
 ]
