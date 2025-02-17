@@ -1,7 +1,8 @@
---column_limit=79
 --assignment_statement_alignment=align
 --case_items_alignment=align
 --class_member_variable_alignment=align
+--column_limit=79
+--compact_indexing_and_selections=false
 --distribution_items_alignment=align
 --enum_assignment_statement_alignment=align
 --formal_parameters_alignment=align
