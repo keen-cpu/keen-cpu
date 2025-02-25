@@ -18,6 +18,13 @@
         };
 
         inherit (pkgs) lib;
+        inherit (pkgs) python3;
+
+        python3-pkgs = python3.withPackages (
+          ps: with ps; [
+            cocotb
+          ]
+        );
 
       in
       {
@@ -32,6 +39,7 @@
               glibcLocales
               mdformat
               pre-commit
+              python3-pkgs
               ruff
               scons
               shfmt
