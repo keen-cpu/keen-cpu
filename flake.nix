@@ -37,6 +37,7 @@
             packages = with pkgs; [
               black
               glibcLocales
+              iverilog
               mdformat
               pre-commit
               python3-pkgs
