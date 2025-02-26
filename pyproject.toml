@@ -1,6 +1,11 @@
 [tool.black]
 line-length = 79
 
+[tool.pytest.ini_options]
+filterwarnings = [
+  'ignore:Python runners and associated APIs are an experimental feature and subject to change.:UserWarning',
+]
+
 [tool.ruff]
 line-length = 79
 
