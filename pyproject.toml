@@ -2,6 +2,7 @@
 line-length = 79
 
 [tool.pytest.ini_options]
+pythonpath = ['.']
 filterwarnings = [
   'ignore:Python runners and associated APIs are an experimental feature and subject to change.:UserWarning',
 ]
