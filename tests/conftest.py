@@ -3,9 +3,21 @@
 # conftest.py -- top-level conftest
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
+import pytest
+
 from functools import wraps
 from inspect import signature
 from typing import Callable
+
+
+@pytest.fixture(scope="session")
+def random_count() -> int:
+    return 128
+
+
+@pytest.fixture(scope="session")
+def seed() -> int:
+    return 0x626F6272
 
 
 def iterable_fixture(*iterables: list[str]) -> Callable:
