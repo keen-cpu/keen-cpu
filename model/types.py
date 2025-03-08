@@ -16,11 +16,10 @@ BintType = Union["Bint", int]
 
 class Bint:
     def __add__(self, x: BintType) -> "Bint":
-        x = self._toBint(x)
+        return self._operator(x, "__add__")
 
-        value = self.value + x.value
-
-        return Bint(self._popcount(value), value)
+    def __and__(self, x: BintType) -> "Bint":
+        return self._operator(x, "__and__")
 
     def __class_getitem__(cls, item: int) -> GenericAlias:
         assert isinstance(item, int)
@@ -55,6 +54,17 @@ class Bint:
 
     def __repr__(self) -> str:
         return f"Bint(bits={self.bits}, value=0x{self.value:0{ceil(self.bits / 4)}x})"
+
+    def _operator(self, x: BintType, operator: str) -> "Bint":
+        x = self._toBint(x)
+
+        operator = getattr(int, operator)
+
+        value = operator(self.value, x.value)
+
+        bits = max(self._popcount(value), self.bits, x.bits)
+
+        return Bint(bits, value)
 
     def _popcount(self, x: int) -> int:
         bits = len(bin(abs(x))[2:])

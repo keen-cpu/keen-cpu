@@ -27,6 +27,11 @@ def bits(seed, random_count) -> list[int]:
 
 
 @pytest.fixture(scope="module")
+def mask(bits) -> list[int]:
+    return [(1 << bits) - 1 for bits in bits]
+
+
+@pytest.fixture(scope="module")
 def value(seed, random_count) -> list[int]:
     rng = Random(seed)
 
@@ -34,35 +39,51 @@ def value(seed, random_count) -> list[int]:
 
 
 @pytest.fixture(scope="module")
-def augend(seed, random_count) -> list[int]:
+def a(seed, random_count) -> list[int]:
     rng = Random(seed + 1)
 
     return [rng.randint(0, VALUE_MAX) for _ in range(random_count)]
 
 
 @pytest.fixture(scope="module")
-def addend(seed, random_count) -> list[int]:
+def b(seed, random_count) -> list[int]:
     rng = Random(seed + 2)
 
     return [rng.randint(0, VALUE_MAX) for _ in range(random_count)]
 
 
 class TestBint:
-    @iterable_fixture("bits", "augend", "addend")
-    def test_add(self, bits: int, augend: int, addend: int) -> None:
-        augend = Bint(bits, augend)
+    @iterable_fixture("bits", "a", "b")
+    def test_add(self, bits: int, a: int, b: int) -> None:
+        a = Bint(bits, a)
 
-        result = augend + addend
-
-        assert isinstance(result, Bint)
-        assert result.value == (augend.value + addend)
-
-        addend = Bint(bits, addend)
-
-        result = augend + addend
+        result = a + b
 
         assert isinstance(result, Bint)
-        assert result.value == (augend.value + addend.value)
+        assert result.value == (a.value + b) & result.mask
+
+        b = Bint(bits, b)
+
+        result = a + b
+
+        assert isinstance(result, Bint)
+        assert result.value == (a.value + b.value) & result.mask
+
+    @iterable_fixture("bits", "a", "b")
+    def test_and(self, bits: int, a: int, b: int) -> None:
+        a = Bint(bits, a)
+
+        result = a & b
+
+        assert isinstance(result, Bint)
+        assert result.value == (a.value & b) & result.mask
+
+        b = Bint(bits, b)
+
+        result = a & b
+
+        assert isinstance(result, Bint)
+        assert result.value == (a.value & b.value) & result.mask
 
     @iterable_fixture("bits")
     def test_class_getitem(self, bits: int) -> None:
@@ -124,28 +145,26 @@ class TestBint:
         with pytest.raises(AttributeError):
             b.bits = 0
 
-    @iterable_fixture("bits")
-    def test_mask(self, bits: int) -> None:
+    @iterable_fixture("bits", "mask")
+    def test_mask(self, bits: int, mask: int) -> None:
         b = Bint(bits)
-
-        mask = (1 << bits) - 1
 
         assert b.mask == mask
 
         with pytest.raises(AttributeError):
             b.mask = 0
 
-    @iterable_fixture("bits", "value")
-    def test_value(self, bits: int, value: int) -> None:
+    @iterable_fixture("bits", "mask", "value")
+    def test_value(self, bits: int, mask: int, value: int) -> None:
         b = Bint(bits, value)
 
-        assert b.value == (value & b.mask)
+        assert b.value == (value & mask)
 
         value -= 17
 
         b.value = value
 
-        assert b.value == (value & b.mask)
+        assert b.value == (value & mask)
 
         with pytest.raises(AssertionError):
             b.value = -1
