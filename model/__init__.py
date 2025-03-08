@@ -4,13 +4,11 @@
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
 from . import (
-    abc,
     clocked,
     types,
 )
 
 __all__ = [
-    "abc",
     "clocked",
     "types",
 ]
