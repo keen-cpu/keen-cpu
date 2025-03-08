@@ -5,10 +5,12 @@
 
 from . import (
     abc,
+    clocked,
     types,
 )
 
 __all__ = [
     "abc",
+    "clocked",
     "types",
 ]
