@@ -12,6 +12,7 @@ from conftest import iterable_fixture
 
 from model.types import (
     Bint,
+    BintDescriptor,
 )
 
 BITS_MAX: Final[int] = 128
@@ -148,3 +149,27 @@ class TestBint:
 
         with pytest.raises(AssertionError):
             b.value = -1
+
+
+class TestBintDescriptor:
+    class Module:
+        x = BintDescriptor()
+
+        def __init__(self) -> None:
+            self._x = Bint(bits=2)
+
+    @pytest.fixture
+    def module(self) -> Module:
+        return self.Module()
+
+    def test_get(self, module: Module) -> None:
+        x = module.x
+
+        assert id(x) != module._x
+
+    def test_set(self, module: Module) -> None:
+        x = module.x
+
+        module.x += 1
+
+        assert module.x == x + 1

@@ -3,6 +3,7 @@
 # types.py -- types
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
+from copy import deepcopy
 from math import ceil
 from typing import (
     Optional,
@@ -86,3 +87,18 @@ class Bint:
         assert x >= 0
 
         self._value = x & self.mask
+
+
+class BintDescriptor:
+    def __set_name__(self, owner: Bint, name: str) -> None:
+        self.name = "_" + name
+
+    def __get__(self, instance: Bint, owner: Optional[Bint] = None) -> Bint:
+        value = getattr(instance, self.name)
+
+        return deepcopy(value)
+
+    def __set__(self, instance: Bint, value: BintType) -> None:
+        bint = getattr(instance, self.name)
+
+        bint.value = value
