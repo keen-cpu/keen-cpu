@@ -18,11 +18,12 @@ from model.types import Bint
 
 class TestClockedAssert:
     def test_missing_bits(self) -> None:
-        with pytest.raises(AssertionError):
+        @clocked
+        class Module:
+            x: Bint
 
-            @clocked
-            class Module:
-                x: Bint
+        with pytest.raises(ValueError):
+            _ = Module()
 
     def test_port_disagreement(self) -> None:
         with pytest.raises(AssertionError):

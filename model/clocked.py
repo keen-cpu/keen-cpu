@@ -171,9 +171,6 @@ def _filter_bint[T](cls: T) -> _PortDict:
         elif port.bits is None:
             port.bits = bits
 
-        assert bits is not None
-        assert port.bits is not None
-
         assert port.bits == bits
 
         ports[name] = port
@@ -215,6 +212,10 @@ def _init_fn[
 
         for name, port in ports.items():
             bits = port.bits
+
+            if bits is None:
+                raise ValueError(f"missing bits for '{name}'")
+
             max_value = (1 << bits) - 1
 
             value = rng.randint(0, max_value)
