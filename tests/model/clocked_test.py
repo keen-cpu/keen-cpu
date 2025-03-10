@@ -10,26 +10,26 @@ import pytest
 from random import Random
 
 from model.clocked import (
-    Field,
+    Port,
     clocked,
 )
 from model.types import Bint
 
 
 class TestClockedAssert:
-    def test_field_disagreement(self) -> None:
-        with pytest.raises(AssertionError):
-
-            @clocked
-            class Module:
-                x: Bint[1] = Field(bits=2)
-
     def test_missing_bits(self) -> None:
         with pytest.raises(AssertionError):
 
             @clocked
             class Module:
                 x: Bint
+
+    def test_port_disagreement(self) -> None:
+        with pytest.raises(AssertionError):
+
+            @clocked
+            class Module:
+                x: Bint[1] = Port(bits=2)
 
     def test_valid_bits(self) -> None:
         @clocked
@@ -38,11 +38,11 @@ class TestClockedAssert:
 
         @clocked
         class Module:
-            x: Bint = Field(bits=1)
+            x: Bint = Port(bits=1)
 
         @clocked
         class Module:
-            x: Bint[1] = Field(bits=1)
+            x: Bint[1] = Port(bits=1)
 
 
 class TestClockedParameters:
@@ -115,7 +115,7 @@ class TestClockedVariables:
     @clocked
     class Module:
         x: Bint[4]
-        y: Bint[8] = Field(output=True)
+        y: Bint[8] = Port(output=True)
 
         def clk_posedge(self) -> None:
             self.x += 1

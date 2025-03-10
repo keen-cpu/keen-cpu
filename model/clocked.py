@@ -3,8 +3,6 @@
 # clocked.py -- clocked classes
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
-# ruff: noqa: F402
-
 from dataclasses import (
     dataclass,
     field,
@@ -98,12 +96,12 @@ class _ClockedInputVariable(_ClockedOutputVariable):
 
 
 @dataclass
-class Field:
+class Port:
     bits: Optional[int] = field(default=None, kw_only=True)
     output: bool = field(default=False, kw_only=True)
 
 
-_FieldDict: TypeAlias = dict[str, Field]
+_PortDict: TypeAlias = dict[str, Port]
 
 
 def _add_clk[T](cls: T) -> None:
@@ -113,9 +111,9 @@ def _add_clk[T](cls: T) -> None:
     setattr(cls, "clk", clk)
 
 
-def _add_descriptors[T](cls: T, /, *, fields: _FieldDict) -> None:
-    for name, field in fields.items():
-        output = field.output
+def _add_descriptors[T](cls: T, /, *, ports: _PortDict) -> None:
+    for name, port in ports.items():
+        output = port.output
 
         bint_descriptor = BintDescriptor()
         bint_descriptor.__set_name__(cls, name)
@@ -132,26 +130,26 @@ def _add_descriptors[T](cls: T, /, *, fields: _FieldDict) -> None:
 def _clocked[
     T
 ](cls: T, /, *, init: bool, repr: bool, seed: Optional[int]) -> T:
-    fields = _filter_bint(cls)
+    ports = _filter_bint(cls)
 
     _add_clk(cls)
-    _add_descriptors(cls, fields=fields)
+    _add_descriptors(cls, ports=ports)
 
     if init:
-        _init = _init_fn(cls, fields=fields, seed=seed)
+        _init = _init_fn(cls, ports=ports, seed=seed)
         _set_new_attribute(cls, "__init__", _init)
 
     if repr:
-        _repr = _repr_fn(cls, fields=fields)
+        _repr = _repr_fn(cls, ports=ports)
         _set_new_attribute(cls, "__repr__", _repr)
 
     return cls
 
 
-def _filter_bint[T](cls: T) -> _FieldDict:
+def _filter_bint[T](cls: T) -> _PortDict:
     annotations = get_annotations(cls)
 
-    fields = {}
+    ports = {}
 
     for name, type in annotations.items():
         bits = None
@@ -165,22 +163,22 @@ def _filter_bint[T](cls: T) -> _FieldDict:
         elif type is not Bint:
             continue
 
-        field = getattr(cls, name, Field(bits=bits))
+        port = getattr(cls, name, Port(bits=bits))
 
         if bits is None:
-            bits = field.bits
+            bits = port.bits
 
-        elif field.bits is None:
-            field.bits = bits
+        elif port.bits is None:
+            port.bits = bits
 
         assert bits is not None
-        assert field.bits is not None
+        assert port.bits is not None
 
-        assert field.bits == bits
+        assert port.bits == bits
 
-        fields[name] = field
+        ports[name] = port
 
-    return fields
+    return ports
 
 
 def _filter_kwargs(func: Callable, kwargs: dict[str, Any]) -> dict[str, Any]:
@@ -205,7 +203,7 @@ def _init_fn[
     cls: T,
     /,
     *,
-    fields: _FieldDict,
+    ports: _PortDict,
     seed: Optional[int] = None,
 ) -> Callable[
     [T], None
@@ -215,8 +213,8 @@ def _init_fn[
 
         rng = Random(seed)
 
-        for name, field in fields.items():
-            bits = field.bits
+        for name, port in ports.items():
+            bits = port.bits
             max_value = (1 << bits) - 1
 
             value = rng.randint(0, max_value)
@@ -233,10 +231,10 @@ def _init_fn[
     return _init
 
 
-def _repr_fn[T](cls: T, fields: _FieldDict) -> str:
+def _repr_fn[T](cls: T, ports: _PortDict) -> str:
     def _repr[T](self: T) -> str:
         vars = [f"clk={self.clk}"] + [
-            f"{name}={repr(getattr(self, name))}" for name in fields
+            f"{name}={repr(getattr(self, name))}" for name in ports
         ]
 
         vars = "\n".join([indent(var + ",", _INDENT) for var in vars])
