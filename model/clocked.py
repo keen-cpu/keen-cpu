@@ -3,6 +3,7 @@
 # clocked.py -- clocked classes
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
+from copy import deepcopy
 from dataclasses import (
     dataclass,
     field,
@@ -93,6 +94,12 @@ class _ClockedOutputVariable:
 class _ClockedInputVariable(_ClockedOutputVariable):
     def __set__[T](self, instance: T, value: Any) -> None:
         setattr(instance, self.name, value)
+
+
+class _DotDict(dict):
+    __getattr__ = dict.get
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__
 
 
 @dataclass
@@ -205,12 +212,30 @@ def _init_fn[
 ) -> Callable[
     [T], None
 ]:
-    def _init[T](self: T, /, **kwargs: dict[str, Any]) -> None:
+    def _init[
+        T, U
+    ](
+        self: T,
+        /,
+        parameters: Optional[U] = None,
+        **kwargs: dict[str, Any],
+    ) -> None:
         super(cls, self).__init__()
+
+        if parameters is None:
+            parameters = getattr(cls, "Parameters", None)
+
+        self.parameters = parameters
+        self.ports = _DotDict(deepcopy(ports))
+
+        parameter_init = getattr(self, "__parameter_init__", None)
+
+        if parameter_init is not None:
+            parameter_init(**_filter_kwargs(parameter_init, kwargs))
 
         rng = Random(seed)
 
-        for name, port in ports.items():
+        for name, port in self.ports.items():
             bits = port.bits
 
             if bits is None:

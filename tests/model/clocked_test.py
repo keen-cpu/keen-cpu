@@ -7,6 +7,7 @@
 
 import pytest
 
+from dataclasses import dataclass
 from random import Random
 
 from model.clocked import (
@@ -24,6 +25,38 @@ class TestClockedAssert:
 
         with pytest.raises(ValueError):
             _ = Module()
+
+    def test_parameters(self) -> None:
+        @clocked
+        class Module:
+            pass
+
+        m = Module()
+
+        assert m.parameters is None
+
+        @clocked
+        class Module:
+            @dataclass(frozen=True)
+            class Parameters:
+                XLEN: int = 32
+
+            x: Bint
+
+            def __parameter_init__(self, /, *, scale: int) -> None:
+                self.ports.x.bits = self.parameters.XLEN * scale
+
+        m = Module(scale=1)
+
+        assert m.x.bits == 32
+
+        m = Module(scale=2)
+
+        assert m.x.bits == 64
+
+        m = Module(parameters=Module.Parameters(XLEN=64), scale=4)
+
+        assert m.x.bits == 256
 
     def test_port_disagreement(self) -> None:
         with pytest.raises(AssertionError):
