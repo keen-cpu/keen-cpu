@@ -225,6 +225,9 @@ def _init_fn[
         if parameters is None:
             parameters = getattr(cls, "Parameters", None)
 
+            if parameters is not None:
+                parameters = parameters()
+
         self.parameters = parameters
         self.ports = _DotDict(deepcopy(ports))
 
