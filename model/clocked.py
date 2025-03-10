@@ -213,11 +213,12 @@ def _init_fn[
     [T], None
 ]:
     def _init[
-        T, U
+        T, U, V
     ](
         self: T,
         /,
         parameters: Optional[U] = None,
+        localparams: Optional[V] = None,
         **kwargs: dict[str, Any],
     ) -> None:
         super(cls, self).__init__()
@@ -228,7 +229,14 @@ def _init_fn[
             if parameters is not None:
                 parameters = parameters()
 
+        if localparams is None:
+            localparams = getattr(cls, "LocalParams", None)
+
+            if localparams is not None:
+                localparams = localparams()
+
         self.parameters = parameters
+        self.localparams = localparams
         self.ports = _DotDict(deepcopy(ports))
 
         parameter_init = getattr(self, "__parameter_init__", None)

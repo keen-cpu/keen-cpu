@@ -18,6 +18,38 @@ from model.types import Bint
 
 
 class TestClockedAssert:
+    def test_localparams(self) -> None:
+        @clocked
+        class Module:
+            pass
+
+        m = Module()
+
+        assert m.localparams is None
+
+        @clocked
+        class Module:
+            @dataclass(frozen=True)
+            class LocalParams:
+                IALIGN: int = 4
+
+            x: Bint
+
+            def __parameter_init__(self, /, *, scale: int) -> None:
+                self.ports.x.bits = self.localparams.IALIGN * scale
+
+        m = Module(scale=1)
+
+        assert m.x.bits == 4
+
+        m = Module(scale=2)
+
+        assert m.x.bits == 8
+
+        m = Module(localparams=Module.LocalParams(IALIGN=8), scale=4)
+
+        assert m.x.bits == 32
+
     def test_missing_bits(self) -> None:
         @clocked
         class Module:
