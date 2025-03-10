@@ -62,20 +62,27 @@ class Bint:
 
         value = operator(self.value, x.value)
 
-        bits = max(self._popcount(value), self.bits, x.bits)
+        bits = max(Bint.clog2(value), self.bits, x.bits)
 
         return Bint(bits, value)
 
-    def _popcount(self, x: int) -> int:
-        bits = len(bin(abs(x))[2:])
-
-        return bits
-
     def _toBint(self, x: BintType) -> int:
         if isinstance(x, int):
-            x = Bint(self._popcount(x), x)
+            x = Bint(Bint.clog2(x), x)
 
         return x
+
+    @staticmethod
+    def clog2(x: BintType) -> int:
+        if isinstance(x, Bint):
+            x = x.value
+
+        x = abs(x)
+
+        if not x:
+            return 1
+
+        return x.bit_length()
 
     @property
     def bits(self) -> int:

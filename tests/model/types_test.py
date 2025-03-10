@@ -136,6 +136,10 @@ class TestBint:
 
         assert original != repr(b)
 
+    @iterable_fixture("value")
+    def test_clog2(self, value: int) -> None:
+        assert Bint.clog2(value) == len(bin(abs(value))[2:])
+
     @iterable_fixture("bits")
     def test_bits(self, bits: int) -> None:
         b = Bint(bits)
