@@ -9,7 +9,11 @@ from dataclasses import (
     dataclass,
     field,
 )
-from inspect import get_annotations
+from inspect import (
+    get_annotations,
+    signature,
+)
+from operator import itemgetter
 from random import Random
 from textwrap import indent
 from types import (
@@ -179,6 +183,22 @@ def _filter_bint[T](cls: T) -> _FieldDict:
     return fields
 
 
+def _filter_kwargs(func: Callable, kwargs: dict[str, Any]) -> dict[str, Any]:
+    sig = signature(func)
+
+    keys = sig.parameters.keys() & kwargs.keys()
+
+    if not bool(keys):
+        return {}
+
+    vals = itemgetter(*keys)(kwargs)
+
+    if not isinstance(vals, tuple):
+        vals = (vals,)
+
+    return dict(zip(keys, vals))
+
+
 def _init_fn[
     T
 ](
@@ -190,7 +210,7 @@ def _init_fn[
 ) -> Callable[
     [T], None
 ]:
-    def _init[T](self: T) -> None:
+    def _init[T](self: T, /, **kwargs: dict[str, Any]) -> None:
         super(cls, self).__init__()
 
         rng = Random(seed)
@@ -208,7 +228,7 @@ def _init_fn[
         post_init = getattr(self, "__post_init__", None)
 
         if post_init is not None:
-            post_init()
+            post_init(**_filter_kwargs(post_init, kwargs))
 
     return _init
 

@@ -68,6 +68,20 @@ class TestClockedParameters:
         class Module:
             pass
 
+    def test_post_init(self) -> None:
+        @clocked
+        class Module:
+            def __post_init__(self, x: bool = 1) -> None:
+                self.x = x
+
+        m = Module(x=2)
+
+        assert m.x == 2
+
+        m = Module(y=2)
+
+        assert m.x == 1
+
     def test_repr(self) -> None:
         @clocked
         class Module:
