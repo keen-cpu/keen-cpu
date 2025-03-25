@@ -24,6 +24,7 @@
           ps: with ps; [
             cocotb
             pytest
+            remote-pdb
           ]
         );
 
