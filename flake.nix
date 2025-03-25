@@ -23,6 +23,7 @@
         python3-pkgs = python3.withPackages (
           ps: with ps; [
             cocotb
+            ipython
             pytest
           ]
         );

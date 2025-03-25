@@ -77,8 +77,6 @@ class Bint:
         if isinstance(x, Bint):
             x = x.value
 
-        x = abs(x)
-
         if not x:
             return 1
 

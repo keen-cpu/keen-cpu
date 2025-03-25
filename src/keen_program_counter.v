@@ -6,7 +6,6 @@
 module keen_program_counter #(
   parameter integer XLEN         = 32,
   parameter integer ILEN         = 32,
-  parameter integer IALIGN       = $clog2(ILEN / 8),
   parameter integer RESET_VECTOR = 32'h8000_0000
 ) (
   input wire              clk,
@@ -16,9 +15,11 @@ module keen_program_counter #(
 
   output reg [XLEN - 1:0] pc
 );
+  localparam integer IALIGN = ILEN / 8;
+
   always @(posedge clk) begin
     if (reset) pc <= RESET_VECTOR;
 
-    if (!reset) pc <= branch ? branch_address : pc + (1 << IALIGN);
+    if (!reset) pc <= branch ? branch_address : pc + IALIGN;
   end
 endmodule

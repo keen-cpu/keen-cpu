@@ -1,16 +1,12 @@
 # SPDX-License-Identifier: MPL-2.0
 #
-# __init__.py -- models
+# __init__.py -- keen-cpu model
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
 from . import (
-    clocked,
-    keen,
-    types,
+    program_counter,
 )
 
 __all__ = [
-    "clocked",
-    "keen",
-    "types",
+    "program_counter",
 ]
