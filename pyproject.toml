@@ -5,6 +5,7 @@ line-length = 79
 filterwarnings = [
   'ignore:Python runners and associated APIs are an experimental feature and subject to change.:UserWarning',
 ]
+pythonpath = ['.']
 
 [tool.ruff]
 line-length = 79

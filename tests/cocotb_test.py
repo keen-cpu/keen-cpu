@@ -21,7 +21,7 @@ TESTS: Final[Path] = PROJECT_ROOT / "tests"
 SOURCES: Final[Path] = list(SRC.glob("**/*.v"))
 
 
-def runner(module_path: Path, test_module: str) -> None:
+def runner(module_path: Path, test_module: str, seed: int) -> None:
     runner = get_runner(SIM)
 
     build_dir = BUILD / "tests" / module_path.with_suffix(".d")
@@ -30,6 +30,10 @@ def runner(module_path: Path, test_module: str) -> None:
 
     runner.build(
         always=True,
+        build_args=[
+            "-c",
+            str((PROJECT_ROOT / ".cmdfile.iverilog").resolve()),
+        ],
         build_dir=build_dir,
         hdl_toplevel=hdl_toplevel,
         includes=includes,
@@ -38,6 +42,7 @@ def runner(module_path: Path, test_module: str) -> None:
 
     runner.test(
         hdl_toplevel=hdl_toplevel,
+        seed=seed,
         test_module=test_module,
     )
 
@@ -49,7 +54,7 @@ for module_path in TESTS.glob("**/keen_*.py"):
 
     test_module = module_path.stem
 
-    def module_runner() -> None:
-        runner(module_path, test_module)
+    def module_runner(seed: int) -> None:
+        runner(module_path, test_module, seed)
 
     setattr(_module, f"test_{test_module}", module_runner)

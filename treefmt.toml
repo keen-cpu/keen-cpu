@@ -82,6 +82,7 @@ includes = [
 [global]
 excludes = [
   "*.lock",
+  ".cmdfile.iverilog",
   ".editorconfig",
   ".flags.verible-format",
   ".gitignore",
