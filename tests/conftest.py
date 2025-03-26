@@ -5,7 +5,12 @@
 
 import pytest
 
+from typing import Final
+
 from pytest import FixtureRequest
+
+
+RANDOM_COUNT: Final[int] = 128
 
 
 def _seed_id(param: int):
