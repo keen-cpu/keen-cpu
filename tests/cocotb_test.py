@@ -30,6 +30,10 @@ def runner(module_path: Path, test_module: str, seed: int) -> None:
 
     runner.build(
         always=True,
+        build_args=[
+            "-c",
+            str((PROJECT_ROOT / ".cmdfile.iverilog").resolve()),
+        ],
         build_dir=build_dir,
         hdl_toplevel=hdl_toplevel,
         includes=includes,
