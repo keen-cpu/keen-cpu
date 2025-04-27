@@ -4,7 +4,6 @@
 # Copyright (C) 2025  Jacob Koziej <jacobkoziej@gmail.com>
 
 from ._adder import Adder
+from ._mux import Mux
 
-__all__ = [
-    "Adder",
-]
+__all__ = ["Adder", "Mux"]
