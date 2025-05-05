@@ -8,6 +8,7 @@
  */
 
 `include "rv32i.vh"
+`include "main_decoder.vh"
 
 module keen_main_decoder #(
   parameter integer XLEN         = 32,
@@ -30,19 +31,17 @@ module keen_main_decoder #(
   output reg [ IMM_SRC_LEN - 1:0] imm_src,
   output reg                      reg_write
 );
-  // Am under the impression this is a SystemVerilog concept that the linter wants?
-  always_comb begin
-    // always @(*) begin
+  always @(*) begin
 
     // Default Values
-    branch     = 1'b0;
-    jump       = 1'b0;
-    result_src = 1'b0;
-    mem_write  = 1'b0;
-    alu_ctrl   = 4'b0000;
-    alu_src    = 1'b0;
-    imm_src    = 2'b00;
-    reg_write  = 1'b0;
+    branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+    jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+    result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+    mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+    alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+    alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+    imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+    reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
 
     case (opcode)
       // R-Type
@@ -52,106 +51,111 @@ module keen_main_decoder #(
             case (funct7)
               // ADD or SUB
               KEEN_INSTRUCTION_SET_RV32I_FUNCT7_ADD: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0000;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;  // dont care
-                reg_write  = 1'b1;
+                branch = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+                alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src =
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               KEEN_INSTRUCTION_SET_RV32I_FUNCT7_SUB: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b1001;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;  // dont care
-                reg_write  = 1'b1;
+                branch = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SUB;
+                alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src =
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0000;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;
-                reg_write  = 1'b0;
+                branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+                alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_SLT: begin
             case (funct7)
               KEEN_INSTRUCTION_SET_RV32I_FUNCT7_SLT: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0001;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;  // dont care
-                reg_write  = 1'b1;
+                branch = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SLT;
+                alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src =
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0000;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;
-                reg_write  = 1'b0;
+                branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+                alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_SLTU: begin
             case (funct7)
               KEEN_INSTRUCTION_SET_RV32I_FUNCT7_SLTU: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0010;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;  // dont care
-                reg_write  = 1'b1;
+                branch = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SLTU;
+                alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src =
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0000;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;
-                reg_write  = 1'b0;
+                branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+                alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_XOR: begin
             case (funct7)
               KEEN_INSTRUCTION_SET_RV32I_FUNCT7_XOR: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0101;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;  // dont care
-                reg_write  = 1'b1;
+                branch = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_XOR;
+                alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src =
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0000;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;
-                reg_write  = 1'b0;
+                branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+                alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
           end
@@ -159,279 +163,283 @@ module keen_main_decoder #(
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_SRL: begin
             case (funct7)
               KEEN_INSTRUCTION_SET_RV32I_FUNCT7_SRL: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0111;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;  // dont care
-                reg_write  = 1'b1;
+                branch = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SRL;
+                alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src =
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               KEEN_INSTRUCTION_SET_RV32I_FUNCT7_SRA: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b1000;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;  // dont care
-                reg_write  = 1'b1;
+                branch = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SRA;
+                alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src =
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0000;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;
-                reg_write  = 1'b0;
+                branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+                alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_OR: begin
             case (funct7)
               KEEN_INSTRUCTION_SET_RV32I_FUNCT7_OR: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0100;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;  // dont care
-                reg_write  = 1'b1;
+                branch = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_OR;
+                alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src =
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0000;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;
-                reg_write  = 1'b0;
+                branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+                alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_AND: begin
             case (funct7)
               KEEN_INSTRUCTION_SET_RV32I_FUNCT7_AND: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0011;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;  // dont care
-                reg_write  = 1'b1;
+                branch = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_AND;
+                alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src =
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0000;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;
-                reg_write  = 1'b0;
+                branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+                alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
           end
           default: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b0;
-            imm_src    = 2'b00;
-            reg_write  = 1'b0;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
         endcase
       end
 
       // I-Type
       KEEN_INSTRUCTION_SET_RV32I_OPCODE_JALR: begin
-        branch     = 1'b0;
-        jump       = 1'b1;
-        result_src = 1'b0;
-        mem_write  = 1'b0;
-        alu_ctrl   = 4'b0000;
-        alu_src    = 1'b1;
-        imm_src    = 2'b00;
-        reg_write  = 1'b1;
+        branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+        jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_ACTIVE;
+        result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_PCP4;
+        mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+        alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+        alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+        imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+        reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
       end
       KEEN_INSTRUCTION_SET_RV32I_OPCODE_LOAD: begin
         case (funct3)
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_LB: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b1;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b1;
-            imm_src    = 2'b00;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_DMEM;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_LH: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b1;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b1;
-            imm_src    = 2'b00;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_DMEM;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_LW: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b1;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b1;
-            imm_src    = 2'b00;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_DMEM;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_LBU: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b1;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b1;
-            imm_src    = 2'b00;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_DMEM;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_LHU: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b1;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b1;
-            imm_src    = 2'b00;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_DMEM;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           default: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b0;
-            imm_src    = 2'b00;
-            reg_write  = 1'b0;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
         endcase
       end
       KEEN_INSTRUCTION_SET_RV32I_OPCODE_OP_IMM: begin
         case (funct3)
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_ADDI: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b1;
-            imm_src    = 2'b00;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_SLTI: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0001;
-            alu_src    = 1'b1;
-            imm_src    = 2'b00;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SLT;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_SLTIU: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0010;
-            alu_src    = 1'b1;
-            imm_src    = 2'b00;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SLTU;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_ORI: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0100;
-            alu_src    = 1'b1;
-            imm_src    = 2'b00;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_OR;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_ANDI: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0011;
-            alu_src    = 1'b1;
-            imm_src    = 2'b00;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_AND;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_SLLI: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0110;
-            alu_src    = 1'b1;
-            imm_src    = 2'b00;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SLL;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           // SRLI or SRAI
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_SRLI: begin
             case (funct7)
               KEEN_INSTRUCTION_SET_RV32I_FUNCT7_SRLI: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0111;
-                alu_src    = 1'b1;
-                imm_src    = 2'b00;
-                reg_write  = 1'b1;
+                branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SRL;
+                alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               KEEN_INSTRUCTION_SET_RV32I_FUNCT7_SRAI: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b1000;
-                alu_src    = 1'b1;
-                imm_src    = 2'b00;
-                reg_write  = 1'b1;
+                branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SRA;
+                alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
-                branch     = 1'b0;
-                jump       = 1'b0;
-                result_src = 1'b0;
-                mem_write  = 1'b0;
-                alu_ctrl   = 4'b0000;
-                alu_src    = 1'b0;
-                imm_src    = 2'b00;
-                reg_write  = 1'b0;
+                branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+                jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+                result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+                mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+                alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+                alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
           end
           default: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b0;
-            imm_src    = 2'b00;
-            reg_write  = 1'b0;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
           // fence, ecall, ebreak
         endcase
@@ -441,44 +449,47 @@ module keen_main_decoder #(
       KEEN_INSTRUCTION_SET_RV32I_OPCODE_STORE: begin
         case (funct3)
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_SB: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;  // don't care
-            mem_write  = 1'b1;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b1;
-            imm_src    = 2'b01;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            // don't care
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_ACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_STYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_SH: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;  // don't care
-            mem_write  = 1'b1;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b1;
-            imm_src    = 2'b01;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            // don't care
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_ACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_STYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_SW: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;  // don't care
-            mem_write  = 1'b1;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b1;
-            imm_src    = 2'b01;
-            reg_write  = 1'b1;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            // don't care
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_ACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_SIGN_EXT;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_STYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
           end
           default: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b0;
-            imm_src    = 2'b00;
-            reg_write  = 1'b0;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
         endcase
       end
@@ -488,124 +499,130 @@ module keen_main_decoder #(
         // BE PREPARED TO CHANGE ALU_CTRL DEPENDING ON ALU ITSELF (NEED TO CHECK)
         case (funct3)
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_BEQ: begin
-            branch     = 1'b1;
-            jump       = 1'b0;
-            result_src = 1'b0;  // don't care
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b1001;
-            alu_src    = 1'b0;
-            imm_src    = 2'b10;
-            reg_write  = 1'b0;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_ACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            // don't care
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SUB;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_BTYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_BNE: begin
-            branch     = 1'b1;
-            jump       = 1'b0;
-            result_src = 1'b0;  // don't care
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b1001;
-            alu_src    = 1'b0;
-            imm_src    = 2'b10;
-            reg_write  = 1'b0;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_ACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            // don't care
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SUB;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_BTYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_BLT: begin
-            branch     = 1'b1;
-            jump       = 1'b0;
-            result_src = 1'b0;  // don't care
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0001;
-            alu_src    = 1'b0;
-            imm_src    = 2'b10;
-            reg_write  = 1'b0;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_ACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            // don't care
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SLT;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_BTYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_BGE: begin
-            branch     = 1'b1;
-            jump       = 1'b0;
-            result_src = 1'b0;  // don't care
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b1010;
-            alu_src    = 1'b0;
-            imm_src    = 2'b10;
-            reg_write  = 1'b0;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_ACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            // don't care
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SGT;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_BTYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_BLTU: begin
-            branch     = 1'b1;
-            jump       = 1'b0;
-            result_src = 1'b0;  // don't care
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0010;
-            alu_src    = 1'b0;
-            imm_src    = 2'b10;
-            reg_write  = 1'b0;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_ACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            // don't care
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SLTU;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_BTYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
           KEEN_INSTRUCTION_SET_RV32I_FUNCT3_BGEU: begin
-            branch     = 1'b1;
-            jump       = 1'b0;
-            result_src = 1'b0;  // don't care
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b1011;
-            alu_src    = 1'b0;
-            imm_src    = 2'b10;
-            reg_write  = 1'b0;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_ACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            // don't care
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SGTU;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_BTYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
           default: begin
-            branch     = 1'b0;
-            jump       = 1'b0;
-            result_src = 1'b0;
-            mem_write  = 1'b0;
-            alu_ctrl   = 4'b0000;
-            alu_src    = 1'b0;
-            imm_src    = 2'b00;
-            reg_write  = 1'b0;
+            branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+            jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+            result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+            mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+            alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+            alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
         endcase
       end
 
       // U-Type
       KEEN_INSTRUCTION_SET_RV32I_OPCODE_LUI: begin
-        branch     = 1'b0;
-        jump       = 1'b0;
-        result_src = 1'b0;
-        mem_write  = 1'b0;
-        alu_ctrl   = 4'b0000;  // don't care
-        alu_src    = 1'b0;  // don't care
-        imm_src    = 2'b11;
-        reg_write  = 1'b1;
+        branch = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+        jump = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+        result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+        mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+        alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;  // don't care
+        alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;  // don't care
+        imm_src = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_JTYPE;
+        reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
       end
       KEEN_INSTRUCTION_SET_RV32I_OPCODE_AUIPC: begin
-        branch     = 1'b0;
-        jump       = 1'b0;
-        result_src = 1'b0;
-        mem_write  = 1'b0;
-        alu_ctrl   = 4'b0000;
-        alu_src    = 1'b0;  // don't care
-        imm_src    = 2'b11;
-        reg_write  = 1'b1;
+        branch = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+        jump = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+        result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+        mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+        alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+        alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;  // don't care
+        imm_src = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_JTYPE;
+        reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
       end
 
       // Jump Type
       KEEN_INSTRUCTION_SET_RV32I_OPCODE_JAL: begin
-        branch     = 1'b0;
-        jump       = 1'b1;
-        result_src = 1'b0;
-        mem_write  = 1'b0;
-        alu_ctrl   = 4'b0000;  // don't care
-        alu_src    = 1'b0;  // don't care
-        imm_src    = 2'b11;
-        reg_write  = 1'b1;
+        branch = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+        jump = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_ACTIVE;
+        result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_PCP4;
+        mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+        alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;  // don't care
+        alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;  // don't care
+        imm_src = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_JTYPE;
+        reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
       end
 
       // Unsure for now
       // KEEN_INSTRUCTION_SET_RV32I_OPCODE_MISC_MEM:
       // KEEN_INSTRUCTION_SET_RV32I_OPCODE_SYSTEM:
       default: begin
-        branch     = 1'b0;
-        jump       = 1'b0;
-        result_src = 1'b0;
-        mem_write  = 1'b0;
-        alu_ctrl   = 4'b0000;
-        alu_src    = 1'b0;
-        imm_src    = 2'b00;
-        reg_write  = 1'b0;
+        branch     = KEEN_INSTRUCTION_SET_MAINDEC_BRANCH_INACTIVE;
+        jump       = KEEN_INSTRUCTION_SET_MAINDEC_JUMP_INACTIVE;
+        result_src = KEEN_INSTRUCTION_SET_MAINDEC_RESULT_SRC_ALU;
+        mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
+        alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
+        alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
+        imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+        reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
       end
     endcase
   end
