@@ -32,6 +32,7 @@ module keen_main_decoder #(
 );
   // Am under the impression this is a SystemVerilog concept that the linter wants?
   always_comb begin
+    // always @(*) begin
 
     // Default Values
     branch     = 1'b0;
