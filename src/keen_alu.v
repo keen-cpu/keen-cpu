@@ -24,9 +24,7 @@ module keen_alu #(
 
   assign zero = (alu_out == 0);
 
-  // Need to fix linter issue
-  always_comb begin
-    //  always @(*) begin
+  always @(*) begin
     case (alu_ctrl)
       KEEN_ALU_CTRL_ADD: begin
         alu_out = a + b;
