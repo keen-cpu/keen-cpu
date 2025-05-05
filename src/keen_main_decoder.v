@@ -16,7 +16,7 @@ module keen_main_decoder #(
   parameter integer FUNCT7_LEN   = 7,
   parameter integer FUNCT3_LEN   = 3,
   parameter integer ALU_CTRL_LEN = 4,
-  parameter integer IMM_SRC_LEN  = 2
+  parameter integer IMM_SRC_LEN  = 3
 ) (
   input wire [     OPLEN - 1:0] opcode,
   input wire [FUNCT7_LEN - 1:0] funct7,
@@ -58,7 +58,7 @@ module keen_main_decoder #(
                 alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
                 alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
                 imm_src =
-                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;  // dont care
                 reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               KEEN_INSTRUCTION_SET_RV32I_FUNCT7_SUB: begin
@@ -69,7 +69,7 @@ module keen_main_decoder #(
                 alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SUB;
                 alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
                 imm_src =
-                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;  // dont care
                 reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
@@ -79,7 +79,7 @@ module keen_main_decoder #(
                 mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
                 alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
                 alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
-                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;
                 reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
@@ -94,7 +94,7 @@ module keen_main_decoder #(
                 alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SLT;
                 alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
                 imm_src =
-                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;  // dont care
                 reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
@@ -104,7 +104,7 @@ module keen_main_decoder #(
                 mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
                 alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
                 alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
-                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;
                 reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
@@ -119,7 +119,7 @@ module keen_main_decoder #(
                 alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SLTU;
                 alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
                 imm_src =
-                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;  // dont care
                 reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
@@ -129,7 +129,7 @@ module keen_main_decoder #(
                 mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
                 alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
                 alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
-                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;
                 reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
@@ -144,7 +144,7 @@ module keen_main_decoder #(
                 alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_XOR;
                 alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
                 imm_src =
-                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;  // dont care
                 reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
@@ -154,7 +154,7 @@ module keen_main_decoder #(
                 mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
                 alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
                 alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
-                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;
                 reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
@@ -170,7 +170,7 @@ module keen_main_decoder #(
                 alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SRL;
                 alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
                 imm_src =
-                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;  // dont care
                 reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               KEEN_INSTRUCTION_SET_RV32I_FUNCT7_SRA: begin
@@ -181,7 +181,7 @@ module keen_main_decoder #(
                 alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_SRA;
                 alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
                 imm_src =
-                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;  // dont care
                 reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
@@ -191,7 +191,7 @@ module keen_main_decoder #(
                 mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
                 alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
                 alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
-                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;
                 reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
@@ -206,7 +206,7 @@ module keen_main_decoder #(
                 alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_OR;
                 alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
                 imm_src =
-                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;  // dont care
                 reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
@@ -216,7 +216,7 @@ module keen_main_decoder #(
                 mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
                 alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
                 alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
-                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;
                 reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
@@ -231,7 +231,7 @@ module keen_main_decoder #(
                 alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_AND;
                 alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
                 imm_src =
-                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;  // dont care
+                    KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;  // dont care
                 reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
               end
               default: begin
@@ -241,7 +241,7 @@ module keen_main_decoder #(
                 mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
                 alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
                 alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
-                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+                imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;
                 reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
               end
             endcase
@@ -253,7 +253,7 @@ module keen_main_decoder #(
             mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
             alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
             alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
-            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_RTYPE;
             reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
         endcase
@@ -488,7 +488,7 @@ module keen_main_decoder #(
             mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
             alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
             alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
-            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_STYPE;
             reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
         endcase
@@ -571,7 +571,7 @@ module keen_main_decoder #(
             mem_write  = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
             alu_ctrl   = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
             alu_src    = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;
-            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_ITYPE;
+            imm_src    = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_BTYPE;
             reg_write  = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_INACTIVE;
           end
         endcase
@@ -585,7 +585,7 @@ module keen_main_decoder #(
         mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
         alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;  // don't care
         alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;  // don't care
-        imm_src = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_JTYPE;
+        imm_src = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_UTYPE;
         reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
       end
       KEEN_INSTRUCTION_SET_RV32I_OPCODE_AUIPC: begin
@@ -595,7 +595,7 @@ module keen_main_decoder #(
         mem_write = KEEN_INSTRUCTION_SET_MAINDEC_MEM_WRITE_INACTIVE;
         alu_ctrl = KEEN_INSTRUCTION_SET_MAINDEC_ALU_CTRL_ADD;
         alu_src = KEEN_INSTRUCTION_SET_MAINDEC_ALU_SRC_REGFILE;  // don't care
-        imm_src = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_JTYPE;
+        imm_src = KEEN_INSTRUCTION_SET_MAINDEC_IMM_SRC_UTYPE;
         reg_write = KEEN_INSTRUCTION_SET_MAINDEC_REG_WRITE_ACTIVE;
       end
 
